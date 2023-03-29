@@ -21,7 +21,7 @@
     </div>
 
     <div id="bottom_row" class="grid h-full grid-cols-[300px_1fr]">
-      <div id="legend" class="flex px-5 py-3 bg-amber-500 flex-col space-y-4"> <!-- Легенда графика -->
+      <div id="legend" class="flex px-5 py-3 bg-white flex-col space-y-4"> <!-- Легенда графика -->
         <div id="max" class="flex justify-start space-x-6">
           <div class="h-6 w-6 bg-blue-600"></div>
           <span>Максимальное значение</span></div>
