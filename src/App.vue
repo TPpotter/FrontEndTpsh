@@ -17,8 +17,8 @@
     </aside>
 
     <main class="grid grid-rows-2 bg-primary">
-      <ChartComponent class="mx-10 my-4 rounded-lg"/>
-      <ChartComponent class="mx-10 my-4 rounded-lg"/>
+      <ChartComponent :chartData="charts[0]" class="mx-10 my-4 rounded-lg"/>
+<!--      <ChartComponent :chartData="charts[1]" class="mx-10 my-4 rounded-lg"/>-->
     </main>
   </div>
 </template>
@@ -26,6 +26,7 @@
 <script>
 import {ComputerDesktopIcon, RectangleGroupIcon, ArrowPathIcon} from "@heroicons/vue/24/outline"
 import ChartComponent from '@/components/ChartComponent.vue'
+
 export default {
   name: 'App',
   components: {
@@ -37,7 +38,46 @@ export default {
 
   data() {
     return {
-      arr: [1, 2, 3, 4, 5]
+      arr: [1, 2, 3, 4, 5],
+      charts: [
+
+        {
+          title: 'Потребление мошности, кВт',
+          graphs: [
+            {
+              name: 'Max',
+              data: [90, 80, 98, 87]
+            }, // Максимальное
+            {
+              name: 'Average',
+              data: [60, 65, 67, 59]
+            }, // Среднее
+            {
+              name: 'Min',
+              data: [20, 24, 31, 12]
+            } // Минималное
+          ],
+        },
+
+        {
+          title: 'Выделение CO2',
+          graphs: [
+            {
+              name: 'Max',
+              data: [90, 80, 98, 87]
+            }, // Максимальное
+            {
+              name: 'Average',
+              data: [60, 65, 67, 59]
+            }, // Среднее
+            {
+              name: 'Min',
+              data: [20, 24, 31, 12]
+            } // Минималное
+          ],
+        }
+
+      ]
     }
   }
 }

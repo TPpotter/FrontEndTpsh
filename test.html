@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>NAME</h1>
+<div id="chart"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    var options = {
+        series: [{
+            name: "Max",
+            data: [80, 50, 70, 90, 23, 45, 100, 10, 35, 78, 21, 69, 90]
+        },
+
+            {
+                name: "Average",
+                data: [30, 28, 10, 35, 14, 36, 42, 12, 9, 35, 23]
+            },
+
+            {
+                name: 'Min',
+                data: []
+
+            },
+
+
+        ],
+
+
+        chart: {
+            height: 1000,
+            type: 'area',
+            zoom: {
+                enabled: false,
+
+            }
+
+        },
+
+        dataLabels: {
+            enabled: false
+        },
+
+        stroke: {
+            width: [2, 2, 2],
+            curve: 'smooth',
+            dashArray: [0, 0, 0]
+        },
+
+        colors: ['#123456', '#345678', '#567890'],
+
+        xaxis: {
+            categories: ['01 Jan', '02 Jan', '03 Jan', '04 Jan', '05 Jan', '06 Jan', '07 Jan', '08 Jan', '09 Jan',
+                '10 Jan', '11 Jan', '12 Jan', '13 Jan'
+            ],
+        },
+
+        tooltip: {
+            enabled: false,
+
+        },
+
+        grid: {
+            borderColor: '#f1f1f1',
+        }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+
+</script>
+</html>

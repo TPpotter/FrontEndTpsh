@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col px-6 py-4 space-y-6 bg-white">
     <div id="top_row" class="flex justify-between w-full"> <!-- Весь верхний ряд-->
-      <h2 class="text-3xl">Потребление мощности, кВт</h2>
+      <h2 id="name_of_chart" class="text-3xl">{{ chartData.title }}</h2>
       <div id="all_buttons_group" class="flex text-xl font-light text-white"> <!-- Группа всех кнопок верхних -->
         <div class="flex justify-between w-56 h-8 px-2 mr-11 bg-buttons rounded-lg">
           <span>В секундах</span>
-          <ChevronDownIcon class="w-5 h-5 self-center" />
+          <ChevronDownIcon class="w-5 h-5 self-center"/>
         </div>
         <div id="functional_buttons" class="flex w-96 h-8 space-x-0.5"> <!-- Группа кнопок Мин Сред Макс -->
           <div class="flex-1 text-center bg-buttons rounded-l-lg">
@@ -36,19 +36,60 @@
           <span>Минимальное значение</span>
         </div>
       </div>
-      <div id="chart" class="flex-auto bg-emerald-600"></div> <!-- График -->
+      <div id="chart" class="flex-auto bg-emerald-600">
+        <apexchart  width="500" type="line" :options="chartOptions" :series="series"/>
+      </div> <!-- График -->
     </div>
 
   </div>
 </template>
 
 <script>
-import { ChevronDownIcon } from "@heroicons/vue/24/outline";
-
+import {ChevronDownIcon} from "@heroicons/vue/24/outline";
 export default {
   name: "ChartComponent",
   components: {
     ChevronDownIcon,
   },
+
+  data() {
+    return {
+      series: []
+    }
+  },
+
+    mounted() {
+      this.series = this.chartData.graphs;
+    },
+
+  props: {
+    chartData: {}
+  },
+
+  computed: {
+    chartOptions() {
+      return {
+        chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        xaxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr'],
+        }
+      }
+    },
+
+
+  }
 };
 </script>
+
