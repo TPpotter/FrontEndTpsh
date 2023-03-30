@@ -8,6 +8,12 @@ module.exports = {
         buttons: '#00476B',
         aside: '#20526B',
       },
+      minHeight: {
+        6: '1.5rem',
+      },
+      minWidth: {
+        6: '1.5rem',
+      },
     },
   },
   plugins: [],
