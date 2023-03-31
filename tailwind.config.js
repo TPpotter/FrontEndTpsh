@@ -4,12 +4,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "primary": "#009CEB",
-        "buttons": "#00476B",
-        "aside": "#20526B",
-
-      }
+        primary: '#009CEB',
+        buttons: '#00476B',
+        aside: '#20526B',
+      },
+      minHeight: {
+        6: '1.5rem',
+      },
+      minWidth: {
+        6: '1.5rem',
+      },
     },
   },
   plugins: [],
-}
+};

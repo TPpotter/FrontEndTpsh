@@ -1,95 +1,97 @@
 <template>
-  <div class="flex flex-col px-6 py-4 space-y-6 bg-white">
-    <div id="top_row" class="flex justify-between w-full"> <!-- Весь верхний ряд-->
+  <div class="flex flex-col px-6 py-4 bg-white">
+    <!-- Весь верхний ряд-->
+    <div id="top_row" class="flex w-full mb-6 justify-between">
       <h2 id="name_of_chart" class="text-3xl">{{ chartData.title }}</h2>
-      <div id="all_buttons_group" class="flex text-xl font-light text-white"> <!-- Группа всех кнопок верхних -->
-        <div class="flex justify-between w-56 h-8 px-2 mr-11 bg-buttons rounded-lg">
+      <!-- Группа всех кнопок верхних -->
+      <div id="all_buttons_group" class="text-white text-xl font-light">
+        <div class="inline-flex items-center justify-between w-56 h-9 px-2 mr-11 bg-buttons rounded-lg">
           <span>В секундах</span>
-          <ChevronDownIcon class="w-5 h-5 self-center"/>
+          <ChevronDownIcon class="w-5 h-5 self-center" />
         </div>
-        <div id="functional_buttons" class="flex w-96 h-8 space-x-0.5"> <!-- Группа кнопок Мин Сред Макс -->
-          <div class="flex-1 text-center bg-buttons rounded-l-lg">
+        <!-- Группа кнопок Мин Сред Макс -->
+        <div id="functional_buttons" class="inline-flex w-96 h-9 space-x-0.5">
+          <div class="flex flex-1 items-center bg-buttons rounded-l-lg">
             <span class="mx-auto">Мин</span>
           </div>
-          <div class="flex-1 text-center bg-buttons">
+          <div class="flex flex-1 items-center bg-buttons">
             <span class="mx-auto">Сред</span>
           </div>
-          <div class="flex-1 text-center bg-buttons rounded-r-lg">
+          <div class="flex flex-1 items-center bg-buttons rounded-r-lg">
             <span class="mx-auto">Макс</span>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="bottom_row" class="flex h-full flex-row space-x-9">
-      <div id="legend" class="flex bg-white flex-col space-y-4"> <!-- Легенда графика -->
-        <div id="max" class="flex">
-          <div class="h-6 w-6 mr-6 bg-blue-600"></div>
+    <div id="bottom_row" class="flex h-full text-lg">
+      <!-- Легенда графика -->
+      <div id="legend" class="w-1/5 bg-white space-y-4">
+        <div id="max" class="flex items-center">
+          <div class="min-h-6 min-w-6 mr-6 bg-blue-600"></div>
           <span>Максимальное значение</span>
         </div>
-        <div id="average" class="flex">
-          <div class="h-6 w-6 mr-6 bg-blue-500"></div>
+        <div id="average" class="flex items-center">
+          <div class="min-h-6 min-w-6 mr-6 bg-blue-500"></div>
           <span>Среднее значение</span>
         </div>
-        <div id="min" class="flex">
-          <div class="h-6 w-6 mr-6 bg-blue-400"></div>
+        <div id="min" class="flex items-center">
+          <div class="min-h-6 min-w-6 mr-6 bg-blue-400"></div>
           <span>Минимальное значение</span>
         </div>
       </div>
-      <div id="chart" class="flex-auto bg-emerald-600">
-        <apexchart  width="500" type="line" :options="chartOptions" :series="series"/>
-      </div> <!-- График -->
+      <!-- График -->
+      <div id="chart" class="w-full h-full">
+        <apexchart v-if="series.length > 0" :height="'100%'" :options="chartOptions" :series="series" />
+      </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import {ChevronDownIcon} from "@heroicons/vue/24/outline";
+import { ChevronDownIcon } from '@heroicons/vue/24/outline';
 export default {
-  name: "ChartComponent",
+  name: 'ChartComponent',
   components: {
     ChevronDownIcon,
   },
 
   data() {
-    return {
-      series: []
-    }
+    return {};
   },
 
-    mounted() {
-      this.series = this.chartData.graphs;
-    },
+  mounted() {},
 
   props: {
-    chartData: {}
+    chartData: {
+      default: () => {},
+      type: Object,
+    },
   },
 
   computed: {
+    series() {
+      return this.chartData.graphs;
+    },
+
     chartOptions() {
       return {
         chart: {
-          height: 350,
           type: 'line',
-          zoom: {
-            enabled: false
-          }
+          zoom: { enabled: false },
         },
-        dataLabels: {
-          enabled: false
+        dataLabels: { enabled: false },
+        legend: {
+          show: false,
         },
         stroke: {
-          curve: 'smooth'
+          curve: 'smooth',
         },
         xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr'],
-        }
-      }
+          categories: this.chartData.categories,
+        },
+      };
     },
-
-
-  }
+  },
 };
 </script>
-
