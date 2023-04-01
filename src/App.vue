@@ -1,19 +1,19 @@
 <template>
   <div class="h-screen grid grid-cols-[120px_auto]">
-    <aside class="flex flex-col items-center border-r border-white bg-aside">
+    <aside class="flex flex-col items-center border-r border-white bg-sidebar">
       <div class="mt-12 space-y-12">
-        <div class="w-16 h-16 rounded-lg bg-white flex items-center justify-center">
-          <ComputerDesktopIcon class="w-10" />
+        <div class="flex justify-center w-16 h-16 rounded-lg bg-white">
+          <RectangleGroupIcon class="w-10" />
         </div>
 
-        <div class="w-16 h-16 rounded-lg bg-white flex items-center justify-center">
-          <RectangleGroupIcon class="w-10 flex justify-center" />
+        <div class="flex justify-center w-16 h-16 rounded-lg bg-white">
+          <ComputerDesktopIcon class="w-10" />
         </div>
       </div>
 
       <div class="mt-auto mb-12">
-        <div class="w-16 h-16 rounded-lg bg-white flex items-center justify-center">
-          <ArrowPathIcon class="w-10 flex justify-center" />
+        <div class="flex justify-center w-16 h-16 rounded-lg bg-white">
+          <ArrowPathIcon class="w-10" />
         </div>
       </div>
     </aside>
