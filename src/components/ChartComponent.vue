@@ -35,7 +35,7 @@
             v-for="agg in aggs"
             :key="agg.id"
             class="relative flex flex-1 items-center bg-button border border-button cursor-pointer overflow-hidden"
-            :class="{ 'rounded-l-lg': agg.id == 'min', 'rounded-r-lg': agg.id == 'max' }"
+            :class="{ 'rounded-l-lg': agg.id === 'min', 'rounded-r-lg': agg.id === 'max' }"
             @click="selectAggs(agg)"
           >
             <div v-if="!selectedAggs.includes(agg.id)" class="absolute w-full h-full bg-black opacity-50"></div>
@@ -86,10 +86,10 @@ export default {
   data() {
     return {
       unit: [
-        { id: 1, name: 'В часах' },
-        { id: 2, name: 'В днях' },
-        { id: 3, name: 'В неделях' },
-        { id: 4, name: 'В годах' },
+        { id: 'hour', name: 'В часах' },
+        { id: 'day', name: 'В днях' },
+        { id: 'week', name: 'В неделях' },
+        { id: 'year', name: 'В годах' },
       ],
       selectedUnit: null,
       aggs: [
@@ -141,6 +141,7 @@ export default {
         tooltip: {
           enabled: false,
         },
+        colors: ['#2563eb', '#3b82f6', '#60a5fa'],
       };
     },
   },
