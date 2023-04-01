@@ -5,9 +5,8 @@ module.exports = {
     extend: {
       colors: {
         primary: '#009CEB',
-        buttons: '#00476B',
-        'buttons-disabled': '#002335',
-        aside: '#20526B',
+        button: '#00476B',
+        sidebar: '#20526B',
         list: '#0085C7',
       },
       minHeight: {
