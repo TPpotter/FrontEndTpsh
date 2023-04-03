@@ -20,11 +20,12 @@ module.exports = {
       minHeight: {
         5: '1.25rem',
         6: '1.5rem',
-        45: '11.25rem',
+        9: '2.25rem',
       },
       minWidth: {
         5: '1.25rem',
         6: '1.5rem',
+        9: '2.25rem',
       },
     },
   },

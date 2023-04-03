@@ -51,6 +51,7 @@ export default {
   mounted() {
     this.selectedItem = this.list[0];
   },
+
   watch: {
     selectedItem(newState) {
       this.$emit('updateItem', newState);

@@ -67,13 +67,8 @@ export default {
         { id: 'avg', name: 'Сред' },
         { id: 'max', name: 'Макс' },
       ],
-      selectedAggs: [],
+      selectedAggs: ['min', 'avg', 'max'],
     };
-  },
-
-  mounted() {
-    this.selectedUnit = this.units[0];
-    this.selectedAggs = this.aggs.map((agg) => agg.id);
   },
 
   props: {
