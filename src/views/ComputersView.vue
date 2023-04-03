@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-rows-[100px_auto] w-full h-full px-16 py-14">
-    <div id="computers_header" class="flex justify-between pb-9">
+  <div class="grid grid-rows-[72px_auto] w-full h-full px-16 py-14 overflow-hidden">
+    <div id="computers_header" class="flex justify-between">
       <div><span class="text-white text-2xl font-bold">Количество компьютеров: 2000</span></div>
       <div>
         <SelecterComponent class="mr-11" :list="buildings" @updateItem="(newItem) => updateBuilding(newItem)" />
