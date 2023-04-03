@@ -2,12 +2,19 @@
   <div class="h-screen grid grid-cols-[120px_auto]">
     <aside class="flex flex-col items-center border-r border-white bg-sidebar">
       <div class="mt-12 space-y-12">
-        <div class="flex justify-center w-16 h-16 rounded-lg bg-green-600 text-white cursor-pointer">
-          <RectangleGroupIcon class="w-10" />
+        <div>
+          <router-link to="/">
+            <div class="flex justify-center w-16 h-16 rounded-lg bg-green-600 text-white cursor-pointer">
+              <RectangleGroupIcon class="w-10" />
+            </div>
+          </router-link>
         </div>
-
-        <div class="flex justify-center w-16 h-16 rounded-lg bg-white cursor-pointer">
-          <ComputerDesktopIcon class="w-10" />
+        <div>
+          <router-link to="/about">
+            <div class="flex justify-center w-16 h-16 rounded-lg bg-white cursor-pointer">
+              <ComputerDesktopIcon class="w-10" />
+            </div>
+          </router-link>
         </div>
       </div>
 

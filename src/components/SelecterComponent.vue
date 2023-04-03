@@ -1,5 +1,5 @@
 <template>
-  <div class="inline-block relative w-56 h-9 mr-11 bg-button rounded-lg z-50 text-white text-xl font-light">
+  <div class="inline-block relative w-56 h-9 bg-button rounded-lg z-50 text-white text-xl font-light">
     <Listbox v-model="selectedItem" v-slot="{ open }">
       <ListboxButton class="flex justify-between items-center w-full h-full px-3 rounded-lg bg-button">
         <span>{{ selectedItem?.name }}</span>

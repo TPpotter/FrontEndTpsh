@@ -6,7 +6,7 @@
       <!-- Группа всех кнопок верхних -->
       <div id="all_buttons_group" class="text-white text-xl font-light">
         <!-- ListBox -->
-        <SelecterComponent :list="units" @updateItem="(newState) => updateUnit(newState)" />
+        <SelecterComponent class="mr-11" :list="units" @updateItem="(newState) => updateUnit(newState)" />
         <!-- Группа кнопок Мин Сред Макс -->
         <div id="functional_buttons" class="inline-flex w-96 h-9 space-x-0.5">
           <div
@@ -125,9 +125,7 @@ export default {
       this.selectedAggs.push(agg.id);
     },
     updateUnit(newUnit) {
-      console.log(newUnit);
       this.selectedUnit = newUnit;
-      console.log(this.selectedUnit);
     },
   },
 };

@@ -17,6 +17,7 @@ module.exports = {
       },
       minHeight: {
         6: '1.5rem',
+        45: '11.25rem',
       },
       minWidth: {
         6: '1.5rem',

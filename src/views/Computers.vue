@@ -1,13 +1,13 @@
 <template>
-  <div class="w-full h-full">
-    <div id="computers_header" class="flex justify-between h-40">
-      <div><span class="text-white">Количество компьютеров: 2000</span></div>
+  <div class="grid grid-rows-[100px_auto] w-full h-full px-16 py-14">
+    <div id="computers_header" class="flex justify-between pb-9">
+      <div><span class="text-white text-2xl font-bold">Количество компьютеров: 2000</span></div>
       <div>
-        <SelecterComponent :list="buildings" />
-        <SelecterComponent :list="rooms" />
+        <SelecterComponent class="mr-11" :list="buildings" @updateItem="(newItem) => updateBuilding(newItem)" />
+        <SelecterComponent :list="rooms" @updateItem="(newItem) => updateRoom(newItem)" />
       </div>
     </div>
-    <div id="computers" class="hidden w-full h-full max-h-screen grid grid-cols-4 gap-x-10 gap-y-5 overflow-y-auto">
+    <div id="computers" class="w-full h-full grid grid-cols-4 gap-x-10 gap-y-10 overflow-y-auto">
       <ComputerCard v-for="el in arr" :key="el"></ComputerCard>
     </div>
   </div>
@@ -47,7 +47,23 @@ export default {
           name: 'Аудитория 703',
         },
       ],
+      selectedBuilding: null,
+      selectedRoom: null,
     };
+  },
+
+  mounted() {
+    this.selectedBuilding = this.buildings[0];
+    this.selectedRoom = this.rooms[0];
+  },
+
+  methods: {
+    updateBuilding(newBuilding) {
+      this.selectedBuilding = newBuilding;
+    },
+    updateRoom(newRoom) {
+      this.selectedRoom = newRoom;
+    },
   },
 };
 </script>
