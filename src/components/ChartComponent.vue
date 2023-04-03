@@ -1,41 +1,41 @@
 <template>
-  <div class="flex flex-col px-6 py-4 bg-white select-none">
+  <div class="flex flex-col px-6 py-4 bg-light">
     <!-- Весь верхний ряд-->
-    <div id="top_row" class="flex w-full mb-6 justify-between">
-      <h2 id="name_of_chart" class="text-3xl">{{ chartData.title }}</h2>
+    <div id="top_row" class="flex w-full mb-6 justify-between items-center">
+      <h2 id="name_of_chart" class="text-2xl xl:text-3xl">{{ chartData.title }}</h2>
       <!-- Группа всех кнопок верхних -->
-      <div id="all_buttons_group" class="text-white text-xl font-light">
+      <div id="all_buttons_group" class="text-light text-lg xl:text-xl font-light">
         <!-- ListBox -->
         <SelecterComponent class="mr-11" :list="units" @updateItem="(newState) => updateUnit(newState)" />
         <!-- Группа кнопок Мин Сред Макс -->
-        <div id="functional_buttons" class="inline-flex w-96 h-9 space-x-0.5">
+        <div id="functional_buttons" class="inline-flex w-80 xl:w-96 h-7 xl:h-9 space-x-0.5">
           <div
             v-for="agg in aggs"
             :key="agg.id"
-            class="relative flex flex-1 items-center bg-button border border-button cursor-pointer overflow-hidden"
+            class="relative flex flex-1 items-center bg-secondary border border-button cursor-pointer overflow-hidden"
             :class="{ 'rounded-l-lg': agg.id === 'min', 'rounded-r-lg': agg.id === 'max' }"
             @click="selectAggs(agg)"
           >
             <div v-if="!selectedAggs.includes(agg.id)" class="absolute w-full h-full bg-black opacity-50"></div>
-            <span class="text-xl mx-auto">{{ agg.name }}</span>
+            <span class="mx-auto">{{ agg.name }}</span>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="bottom_row" class="flex h-full text-lg">
+    <div id="bottom_row" class="flex h-full text-md xl:text-lg">
       <!-- Легенда графика -->
-      <div id="legend" class="w-1/5 bg-white space-y-4">
+      <div id="legend" class="w-1/5 bg-light space-y-4">
         <div id="max" class="flex items-center">
-          <div class="min-h-6 min-w-6 mr-6 bg-blue-600"></div>
+          <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-600"></div>
           <span>Максимальное значение</span>
         </div>
         <div id="average" class="flex items-center">
-          <div class="min-h-6 min-w-6 mr-6 bg-blue-500"></div>
+          <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-500"></div>
           <span>Среднее значение</span>
         </div>
         <div id="min" class="flex items-center">
-          <div class="min-h-6 min-w-6 mr-6 bg-blue-400"></div>
+          <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-400"></div>
           <span>Минимальное значение</span>
         </div>
       </div>

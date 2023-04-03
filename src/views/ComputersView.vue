@@ -1,14 +1,14 @@
 <template>
-  <div class="grid grid-rows-[72px_auto] w-full h-full px-16 py-14 overflow-hidden">
+  <div class="grid grid-rows-[72px_auto] w-full h-full px-16 pt-14 overflow-hidden">
     <div id="computers_header" class="flex justify-between">
-      <div><span class="text-white text-2xl font-bold">Количество компьютеров: 2000</span></div>
+      <div><span class="text-light text-2xl font-bold">Количество компьютеров: 2000</span></div>
       <div>
         <SelecterComponent class="mr-11" :list="buildings" @updateItem="(newItem) => updateBuilding(newItem)" />
         <SelecterComponent :list="rooms" @updateItem="(newItem) => updateRoom(newItem)" />
       </div>
     </div>
-    <div id="computers" class="w-full h-full grid grid-cols-4 gap-x-10 gap-y-10 overflow-y-auto">
-      <ComputerCard v-for="el in arr" :key="el"></ComputerCard>
+    <div id="computers" class="w-full h-full grid grid-cols-4 gap-x-10 overflow-y-auto">
+      <ComputerCard v-for="el in arr" :key="el" class="mb-10"></ComputerCard>
     </div>
   </div>
 </template>

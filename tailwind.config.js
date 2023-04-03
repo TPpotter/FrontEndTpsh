@@ -5,9 +5,11 @@ module.exports = {
     extend: {
       colors: {
         primary: '#009CEB',
-        button: '#00476B',
-        sidebar: '#20526B',
-        list: '#0085C7',
+        secondary: '#053B56',
+        dark: '#3F3F3F',
+        light: '#FCFCFC',
+        'default-blue': '#1989FA',
+        'default-green': '#06C270',
       },
       width: {
         90: '22.5rem',
@@ -16,10 +18,12 @@ module.exports = {
         45: '11.25rem',
       },
       minHeight: {
+        5: '1.25rem',
         6: '1.5rem',
         45: '11.25rem',
       },
       minWidth: {
+        5: '1.25rem',
         6: '1.5rem',
       },
     },
