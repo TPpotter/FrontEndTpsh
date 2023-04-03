@@ -3,3 +3,13 @@
 @tailwind components;
 
 @tailwind utilities;
+
+* {
+  scrollbar-width: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
