@@ -1,5 +1,5 @@
 <template>
-  <main class="grid grid-rows-2 bg-primary">
+  <main class="grid grid-rows-2">
     <ChartComponent :chartData="charts[0]" ref="chart1" class="mx-10 my-4 rounded-lg" />
     <ChartComponent :chartData="charts[1]" ref="chart2" class="mx-10 my-4 rounded-lg" />
   </main>

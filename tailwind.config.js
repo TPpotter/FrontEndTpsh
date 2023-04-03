@@ -9,6 +9,12 @@ module.exports = {
         sidebar: '#20526B',
         list: '#0085C7',
       },
+      width: {
+        90: '22.5rem',
+      },
+      height: {
+        45: '11.25rem',
+      },
       minHeight: {
         6: '1.5rem',
       },

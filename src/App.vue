@@ -17,7 +17,7 @@
         </div>
       </div>
     </aside>
-    <router-view />
+    <router-view class="bg-primary" />
   </div>
 </template>
 <script>
