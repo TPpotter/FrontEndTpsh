@@ -23,24 +23,17 @@
           </router-link>
         </div>
       </div>
-
-      <div class="mt-auto mb-12">
-        <div class="flex justify-center w-16 h-16 rounded-lg bg-light cursor-pointer" @click="updateCharts()">
-          <ArrowPathIcon class="w-10" />
-        </div>
-      </div>
     </aside>
     <router-view class="bg-primary" />
   </div>
 </template>
 <script>
-import { ComputerDesktopIcon, RectangleGroupIcon, ArrowPathIcon } from '@heroicons/vue/24/outline';
+import { ComputerDesktopIcon, RectangleGroupIcon } from '@heroicons/vue/24/outline';
 export default {
   name: 'App',
   components: {
     ComputerDesktopIcon,
     RectangleGroupIcon,
-    ArrowPathIcon,
   },
 };
 </script>

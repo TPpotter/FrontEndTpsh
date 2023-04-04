@@ -10,11 +10,11 @@
       <div id="info" class="xl:grid grid-cols-[2fr_1fr]">
         <div id="stat">
           <div id="electricity" class="flex flex-col pb-2">
-            <span class="underline text-md xl:text-lg">Электропотребление, кВт</span>
+            <span class="text-md xl:text-lg">Электропотребление, кВт</span>
             <span class="font-semibold">0.1345728348</span>
           </div>
           <div id="co2" class="flex flex-col">
-            <span class="underline text-md xl:text-lg">CO2, кг</span>
+            <span class="text-md xl:text-lg">CO2, кг</span>
             <span class="font-semibold">0.4267912945</span>
           </div>
         </div>
