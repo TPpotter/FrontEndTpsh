@@ -52,11 +52,6 @@ export default {
     };
   },
 
-  mounted() {
-    this.selectedBuilding = this.buildings[0];
-    this.selectedRoom = this.rooms[0];
-  },
-
   methods: {
     updateBuilding(newBuilding) {
       this.selectedBuilding = newBuilding;

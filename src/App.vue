@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen grid grid-cols-[120px_auto] select-none">
+  <div class="h-screen grid grid-cols-[120px_auto] select-none text-dark">
     <aside class="flex flex-col items-center bg-secondary">
       <div class="mt-12 space-y-12">
         <div>
