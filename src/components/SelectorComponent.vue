@@ -30,7 +30,7 @@
 import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/vue';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/vue/20/solid';
 export default {
-  name: 'SelecterComponent',
+  name: 'SelectorComponent',
   components: {
     Listbox,
     ListboxButton,
@@ -47,9 +47,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    defaultValue: null,
   },
   mounted() {
-    this.selectedItem = this.list[0];
+    this.selectedItem = this.defaultValue || this.list[0];
   },
 
   watch: {

@@ -6,9 +6,13 @@
       <!-- Группа всех кнопок верхних -->
       <div id="all_buttons_group" class="text-light text-lg xl:text-xl font-light">
         <!-- ListBox -->
-        <SelecterComponent class="mr-11" :list="units" @updateItem="(newState) => updateUnit(newState)" />
+        <SelectorComponent :list="units" @updateItem="(newState) => updateUnit(newState)" />
         <!-- Группа кнопок Мин Сред Макс -->
-        <div id="functional_buttons" class="inline-flex w-80 xl:w-96 h-7 xl:h-9 space-x-0.5">
+        <div
+          v-if="!selectedComputer"
+          id="functional_buttons"
+          class="inline-flex w-80 xl:w-96 h-7 xl:h-9 ml-11 space-x-0.5"
+        >
           <div
             v-for="agg in aggs"
             :key="agg.id"
@@ -23,51 +27,61 @@
       </div>
     </div>
 
-    <div id="bottom_row" class="flex h-full text-md xl:text-lg">
-      <!-- Легенда графика -->
-      <div id="legend" class="w-1/5 bg-light space-y-4">
-        <div id="max" class="flex items-center">
-          <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-600"></div>
-          <span>Максимальное значение</span>
+    <div v-if="series?.length > 0" id="bottom_row" class="flex h-full text-md">
+      <div class="flex flex-col h-full">
+        <!-- Легенда графика -->
+
+        <div id="legend" class="w-max bg-light space-y-4">
+          <div id="max" class="flex items-center">
+            <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-600"></div>
+            <span>Максимальное значение</span>
+          </div>
+          <div id="average" class="flex items-center">
+            <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-500"></div>
+            <span>Среднее значение</span>
+          </div>
+          <div id="min" class="flex items-center">
+            <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-400"></div>
+            <span>Минимальное значение</span>
+          </div>
         </div>
-        <div id="average" class="flex items-center">
-          <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-500"></div>
-          <span>Среднее значение</span>
-        </div>
-        <div id="min" class="flex items-center">
-          <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-400"></div>
-          <span>Минимальное значение</span>
+        <div v-if="selectedComputer" class="mt-auto text-gray-400 text-lg">
+          <span class="block">Компьютер #{{ selectedComputer.id }}</span>
+          <span class="block">Аудитория {{ selectedComputer.building }}{{ selectedComputer.room }}</span>
         </div>
       </div>
       <!-- График -->
       <div id="chart" class="w-full h-full">
-        <apexchart v-if="series.length > 0" :height="'100%'" :options="chartOptions" :series="series" />
+        <apexchart :height="'100%'" :options="chartOptions" :series="series" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import SelecterComponent from '@/components/SelecterComponent.vue';
+import SelectorComponent from '@/components/SelectorComponent.vue';
+import { useStore } from '@/store/index.js';
+import { mapState, mapWritableState } from 'pinia';
 export default {
   name: 'ChartComponent',
-  components: { SelecterComponent },
+  components: { SelectorComponent },
 
   data() {
     return {
       units: [
-        { id: 'hour', name: 'В часах' },
-        { id: 'day', name: 'В днях' },
-        { id: 'week', name: 'В неделях' },
-        { id: 'year', name: 'В годах' },
+        { id: 'minutes', name: 'В минутах' },
+        { id: 'hours', name: 'В часах' },
+        { id: 'days', name: 'В днях' },
+        { id: 'weeks', name: 'В неделях' },
+        { id: 'years', name: 'В годах' },
       ],
-      selectedUnit: null,
       aggs: [
         { id: 'min', name: 'Мин' },
         { id: 'avg', name: 'Сред' },
         { id: 'max', name: 'Макс' },
       ],
       selectedAggs: ['min', 'avg', 'max'],
+      store: useStore(),
     };
   },
 
@@ -79,16 +93,31 @@ export default {
   },
 
   computed: {
+    ...mapWritableState(useStore, ['chartUnits']),
+    ...mapState(useStore, ['selectedComputer', 'selectedBuilding', 'selectedRoom']),
+
     series() {
       return this.chartData.graphs;
     },
-
     chartOptions() {
       return {
         chart: {
           type: 'line',
           zoom: {
             enabled: false,
+          },
+          animations: {
+            enabled: true,
+            easing: 'easeinout',
+            speed: 800,
+            animateGradually: {
+              enabled: true,
+              delay: 150,
+            },
+            dynamicAnimation: {
+              enabled: true,
+              speed: 350,
+            },
           },
         },
         dataLabels: {
@@ -100,11 +129,15 @@ export default {
         stroke: {
           curve: 'smooth',
         },
-        xaxis: {
-          categories: this.chartData.categories,
-        },
         tooltip: {
           enabled: false,
+        },
+        yaxis: {
+          labels: {
+            formatter: (value) => {
+              return Number(value).toFixed(5);
+            },
+          },
         },
         colors: ['#2563eb', '#3b82f6', '#60a5fa'],
       };
@@ -120,7 +153,7 @@ export default {
       this.selectedAggs.push(agg.id);
     },
     updateUnit(newUnit) {
-      this.selectedUnit = newUnit;
+      this.chartUnits[this.chartData.id] = newUnit;
     },
   },
 };

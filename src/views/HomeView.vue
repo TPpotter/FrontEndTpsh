@@ -1,12 +1,14 @@
 <template>
   <main class="grid grid-rows-2">
-    <ChartComponent :chartData="charts[0]" ref="chart1" class="mx-10 my-4 rounded-lg" />
-    <ChartComponent :chartData="charts[1]" ref="chart2" class="mx-10 my-4 rounded-lg" />
+    <ChartComponent v-for="chart in charts" :key="chart.id" :chartData="chart" class="mx-10 my-4 rounded-lg" />
   </main>
 </template>
 
 <script>
 import ChartComponent from '@/components/ChartComponent.vue';
+import axios from 'axios';
+import { mapState, mapWritableState } from 'pinia';
+import { useStore } from '@/store';
 export default {
   name: 'HomeView',
   components: {
@@ -15,59 +17,73 @@ export default {
 
   data() {
     return {
-      charts: [
-        {
-          title: 'Потребление мошности, кВт',
-          graphs: [
-            {
-              name: 'Max',
-              data: [90, 80, 98, 87],
-            }, // Максимальное
-            {
-              name: 'Average',
-              data: [60, 65, 67, 59],
-            }, // Среднее
-            {
-              name: 'Min',
-              data: [20, 24, 31, 12],
-            }, // Минималное
-          ],
-          categories: ['Jan', 'Feb', 'Mar', 'Apr'],
-        },
-
-        {
-          title: 'Выделение CO2, кг',
-          graphs: [
-            {
-              name: 'Max',
-              data: [90, 80, 98, 87],
-            }, // Максимальное
-            {
-              name: 'Average',
-              data: [60, 65, 67, 59],
-            }, // Среднее
-            {
-              name: 'Min',
-              data: [20, 24, 31, 12],
-            }, // Минималное
-          ],
-          categories: ['Jan', 'Feb', 'Mar', 'Apr'],
-        },
-      ],
+      store: useStore(),
     };
   },
 
-  mounted() {
-    // setInterval(() => {
-    //   this.charts[0].graphs.map((g, idx) => g.data.push((4 - idx) * 10));
-    //   this.charts[0].categories.push("May");
-    // }, 2000);
+  computed: {
+    ...mapState(useStore, ['chartUnits']),
+    ...mapWritableState(useStore, ['charts']),
+  },
+
+  async mounted() {
+    await this.updateCharts();
+
+    this.store.$subscribe(async (mutation) => {
+      if (mutation.events.key === 'co2' || mutation.events.key === 'consumption') {
+        await this.updateCharts();
+      }
+    });
   },
 
   methods: {
-    updateCharts() {
-      console.log(this.$refs.chart1);
-      return 0;
+    serializeData(data) {
+      return [
+        {
+          name: 'Max',
+          data: data.map((d) => ({ x: d.date, y: d.value_max })),
+        },
+        {
+          name: 'Average',
+          data: data.map((d) => ({ x: d.date, y: d.value_avg })),
+        },
+        {
+          name: 'Min',
+          data: data.map((d) => ({ x: d.date, y: d.value_min })),
+        },
+      ];
+    },
+
+    async updateCharts() {
+      const co2Data = await axios
+        .get(`/api/graph/co2`, {
+          params: {
+            unit: this.chartUnits.co2.id,
+          },
+        })
+        .then(({ data }) => data);
+
+      const consumptionData = await axios
+        .get(`/api/graph/consumption`, {
+          params: {
+            unit: this.chartUnits.consumption.id,
+          },
+        })
+        .then(({ data }) => data);
+
+      const consumption = {
+        id: 'consumption',
+        title: 'Потребление мошности, кВт',
+        graphs: this.serializeData(consumptionData),
+      };
+
+      const co2 = {
+        id: 'co2',
+        title: 'Выделение CO2, кг',
+        graphs: this.serializeData(co2Data),
+      };
+
+      this.charts = [consumption, co2];
     },
   },
 };
