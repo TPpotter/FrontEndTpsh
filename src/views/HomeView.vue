@@ -1,6 +1,12 @@
 <template>
   <main class="grid grid-rows-2">
-    <ChartComponent v-for="chart in charts" :key="chart.id" :chartData="chart" class="mx-10 my-4 rounded-lg" />
+    <ChartComponent
+      v-for="chart in charts"
+      :key="chart.id"
+      :chartData="chart"
+      :isLoading="isLoading"
+      class="mx-10 my-4 rounded-lg"
+    />
   </main>
 </template>
 
@@ -18,47 +24,62 @@ export default {
   data() {
     return {
       store: useStore(),
+      isLoading: false,
     };
   },
 
   computed: {
-    ...mapState(useStore, ['chartUnits']),
+    ...mapState(useStore, ['chartUnits', 'selectedComputer']),
     ...mapWritableState(useStore, ['charts']),
   },
 
   async mounted() {
     await this.updateCharts();
-
     this.store.$subscribe(async (mutation) => {
-      if (mutation.events.key === 'co2' || mutation.events.key === 'consumption') {
+      if (['co2', 'consumption', 'selectedComputer'].includes(mutation.events.key)) {
         await this.updateCharts();
       }
     });
+  },
+
+  unmounted() {
+    this.store.$dispose();
   },
 
   methods: {
     serializeData(data) {
       return [
         {
-          name: 'Max',
+          id: 'max',
+          name: 'Максимальное значение',
           data: data.map((d) => ({ x: d.date, y: d.value_max })),
         },
         {
-          name: 'Average',
+          id: 'avg',
+          name: 'Среднее значение',
           data: data.map((d) => ({ x: d.date, y: d.value_avg })),
         },
         {
-          name: 'Min',
+          id: 'min',
+          name: 'Минимальное значение',
           data: data.map((d) => ({ x: d.date, y: d.value_min })),
+        },
+        {
+          id: 'sum',
+          name: 'Суммарное значение',
+          data: data.map((d) => ({ x: d.date, y: d.value_sum })),
         },
       ];
     },
 
     async updateCharts() {
+      this.isLoading = true;
+
       const co2Data = await axios
         .get(`/api/graph/co2`, {
           params: {
             unit: this.chartUnits.co2.id,
+            ...(this.selectedComputer && { computer_id: this.selectedComputer.id }),
           },
         })
         .then(({ data }) => data);
@@ -67,6 +88,7 @@ export default {
         .get(`/api/graph/consumption`, {
           params: {
             unit: this.chartUnits.consumption.id,
+            ...(this.selectedComputer && { computer_id: this.selectedComputer.id }),
           },
         })
         .then(({ data }) => data);
@@ -84,6 +106,8 @@ export default {
       };
 
       this.charts = [consumption, co2];
+
+      this.isLoading = false;
     },
   },
 };

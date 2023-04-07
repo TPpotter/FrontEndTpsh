@@ -6,7 +6,11 @@
       <!-- Группа всех кнопок верхних -->
       <div id="all_buttons_group" class="text-light text-lg xl:text-xl font-light">
         <!-- ListBox -->
-        <SelectorComponent :list="units" @updateItem="(newState) => updateUnit(newState)" />
+        <SelectorComponent
+          :list="units"
+          :defaultValue="chartUnits[chartData.id]"
+          @updateItem="(newState) => updateUnit(newState)"
+        />
         <!-- Группа кнопок Мин Сред Макс -->
         <div
           v-if="!selectedComputer"
@@ -27,31 +31,43 @@
       </div>
     </div>
 
-    <div v-if="series?.length > 0" id="bottom_row" class="flex h-full text-md">
+    <div class="flex h-full items-center bg-black opacity-50 rounded-lg" :class="{ hidden: !isLoading }">
+      <svg
+        class="animate-spin h-20 w-20 mx-auto text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle class="opacity-50" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path
+          class="opacity-70"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+    </div>
+    <div id="bottom_row" class="grid grid-cols-[15%_auto] h-full text-md" :class="{ hidden: isLoading }">
       <div class="flex flex-col h-full">
         <!-- Легенда графика -->
 
         <div id="legend" class="w-max bg-light space-y-4">
-          <div id="max" class="flex items-center">
-            <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-600"></div>
-            <span>Максимальное значение</span>
-          </div>
-          <div id="average" class="flex items-center">
-            <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-500"></div>
-            <span>Среднее значение</span>
-          </div>
-          <div id="min" class="flex items-center">
-            <div class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6 bg-blue-400"></div>
-            <span>Минимальное значение</span>
+          <div v-for="s in series" :key="s.id" class="flex items-center">
+            <div
+              class="min-h-5 min-w-5 xl:min-h-6 xl:min-w-6 mr-5 xl:mr-6"
+              :style="{
+                backgroundColor: s.id === 'min' ? '#60a5fa' : s.id === 'avg' ? '#3b82f6' : '#2563eb',
+              }"
+            ></div>
+            <span>{{ s.name }}</span>
           </div>
         </div>
         <div v-if="selectedComputer" class="mt-auto text-gray-400 text-lg">
-          <span class="block">Компьютер #{{ selectedComputer.id }}</span>
-          <span class="block">Аудитория {{ selectedComputer.building }}{{ selectedComputer.room }}</span>
+          <span class="block">Компьютер #{{ selectedComputer.name }}</span>
+          <span class="block">Аудитория {{ selectedComputer.classroom }}</span>
         </div>
       </div>
       <!-- График -->
-      <div id="chart" class="w-full h-full">
+      <div id="chart" class="h-full">
         <apexchart :height="'100%'" :options="chartOptions" :series="series" />
       </div>
     </div>
@@ -61,7 +77,7 @@
 <script>
 import SelectorComponent from '@/components/SelectorComponent.vue';
 import { useStore } from '@/store/index.js';
-import { mapState, mapWritableState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 export default {
   name: 'ChartComponent',
   components: { SelectorComponent },
@@ -87,18 +103,24 @@ export default {
 
   props: {
     chartData: {
-      default: () => {},
+      default: () => null,
       type: Object,
+    },
+    isLoading: {
+      default: () => false,
+      type: Boolean,
     },
   },
 
   computed: {
-    ...mapWritableState(useStore, ['chartUnits']),
-    ...mapState(useStore, ['selectedComputer', 'selectedBuilding', 'selectedRoom']),
+    ...mapState(useStore, ['selectedComputer', 'selectedBuilding', 'selectedRoom', 'chartUnits']),
 
     series() {
-      return this.chartData.graphs;
+      return this.selectedComputer
+        ? this.chartData.graphs?.filter((g) => g.id === 'sum')
+        : this.chartData.graphs?.filter((g) => this.selectedAggs.includes(g.id));
     },
+
     chartOptions() {
       return {
         chart: {
@@ -107,18 +129,21 @@ export default {
             enabled: false,
           },
           animations: {
-            enabled: true,
+            enabled: false,
             easing: 'easeinout',
             speed: 800,
             animateGradually: {
               enabled: true,
-              delay: 150,
+              delay: 100,
             },
             dynamicAnimation: {
               enabled: true,
-              speed: 350,
+              speed: 100,
             },
           },
+        },
+        noData: {
+          text: 'Loading...',
         },
         dataLabels: {
           enabled: false,
@@ -145,6 +170,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(useStore, ['changeChartUnit']),
+
     selectAggs(agg) {
       if (this.selectedAggs.includes(agg.id)) {
         this.selectedAggs = this.selectedAggs.filter((sagg) => sagg !== agg.id);
@@ -152,8 +179,9 @@ export default {
       }
       this.selectedAggs.push(agg.id);
     },
+
     updateUnit(newUnit) {
-      this.chartUnits[this.chartData.id] = newUnit;
+      this.changeChartUnit(this.chartData.id, newUnit);
     },
   },
 };

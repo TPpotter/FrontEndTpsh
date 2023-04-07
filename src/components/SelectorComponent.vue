@@ -50,7 +50,7 @@ export default {
     defaultValue: null,
   },
   mounted() {
-    this.selectedItem = this.defaultValue || this.list[0];
+    this.selectedItem = this.list.find((el) => el.id === this.defaultValue.id) || this.list[0];
   },
 
   watch: {

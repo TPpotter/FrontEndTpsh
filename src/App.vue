@@ -40,6 +40,7 @@
 import { ComputerDesktopIcon, RectangleGroupIcon, ArrowPathIcon } from '@heroicons/vue/24/outline';
 import { useStore } from '@/store';
 import { mapWritableState } from 'pinia';
+import axios from 'axios';
 
 export default {
   name: 'App',
@@ -48,9 +49,29 @@ export default {
     RectangleGroupIcon,
     ArrowPathIcon,
   },
+  data() {
+    return {
+      store: useStore(),
+    };
+  },
+
+  async mounted() {
+    this.availableComputers = await axios
+      .get(`/api/computer/`, {})
+      .then(({ data }) => data.sort((a, b) => a.name.localeCompare(b.name)));
+
+    this.availableBuildings.push(
+      ...(await axios.get('/api/computer/housings/', {}).then(({ data }) =>
+        data.map((d) => ({
+          id: d.name,
+          name: `Корпус ${d.name.toUpperCase()}`,
+        }))
+      ))
+    );
+  },
 
   computed: {
-    ...mapWritableState(useStore, ['selectedComputer']),
+    ...mapWritableState(useStore, ['selectedComputer', 'availableComputers', 'availableBuildings']),
   },
 
   methods: {
